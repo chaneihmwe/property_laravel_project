@@ -411,13 +411,28 @@ unset($__errorArgs, $__bag); ?>
                     </div>
                                
                     <div class="form-group">
-                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3851939.0559790777!2d94.47181513781126!3d19.470253532422557!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x305652a7714e2907%3A0xba7b0ee41c622b11!2sMyanmar%20(Burma)!5e0!3m2!1sen!2smm!4v1584077219243!5m2!1sen!2smm" width="400" height="300" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                      <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3851939.0559790777!2d94.47181513781126!3d19.470253532422557!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x305652a7714e2907%3A0xba7b0ee41c622b11!2sMyanmar%20(Burma)!5e0!3m2!1sen!2smm!4v1584077219243!5m2!1sen!2smm" width="400" height="300" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe> -->
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                          <div class="geocoder mb-3">
+                            <div id="geocoder">
+                          
+                            </div>
+                          </div>
+                          <div id="map">
+                            
+                          </div>
+                        </div>
+                        
+                      </div>
+                    
+
                     </div>
 
                     <div class="form-group">
                       <div class="row">
                         <div class="col-6">
-                          <label for="longitude">Longitude</label>
+                          <label for="lng">Longitude</label>
                           <input type="text" class="form-control <?php $__errorArgs = ['longitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -425,7 +440,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" id="longitude" name="longitude" autofocus>
+unset($__errorArgs, $__bag); ?>" id="lng" name="longitude" autofocus>
 
                           <?php $__errorArgs = ['longitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -442,7 +457,7 @@ unset($__errorArgs, $__bag); ?>
                           <p class="error-message-longitude p-2 text-md-left text-danger"></p>
                         </div>
                         <div class="col-6">
-                          <label for="latitude">Latitude</label>
+                          <label for="lat">Latitude</label>
                           <input type="text" class="form-control <?php $__errorArgs = ['latitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -450,7 +465,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" id="latitude" name="latitude" autofocus>
+unset($__errorArgs, $__bag); ?>" id="lat" name="latitude" autofocus>
 
                           <?php $__errorArgs = ['latitude'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -870,6 +885,113 @@ unset($__errorArgs, $__bag); ?>
 
 <script type="text/javascript">
   $(document).ready(function () {
+
+    getMap();
+   function getMap(){
+  var url="<?php echo e(route('admin.get_map')); ?>";
+        $.ajax({
+          type:'get',
+          url: url,
+          processData: false,
+          contentType: false,
+          success: (data) => {
+
+            var saved_markers = data;
+        console.log("Map=> "+saved_markers);
+        var user_location = [100.541802,13.745575];
+        mapboxgl.accessToken ='pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v9',
+            center: user_location,
+            zoom: 10
+        });
+        //  geocoder here
+        var geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            // limit results to Australia
+            //country: 'IN',
+        });
+
+        var marker ;
+
+        // After the map style has loaded on the page, add a source layer and default
+        // styling for a single point.
+        map.on('load', function() {
+            addMarker(user_location,'load');
+            add_markers(saved_markers);
+
+            // Listen for the `result` event from the MapboxGeocoder that is triggered when a user
+            // makes a selection and add a symbol that matches the result.
+            geocoder.on('result', function(ev) {
+                alert("aaaaa");
+                console.log(ev.result.center);
+
+            });
+        });
+        map.on('click', function (e) {
+            marker.remove();
+            addMarker(e.lngLat,'click');
+            //console.log(e.lngLat.lat);
+            document.getElementById("lat").value = e.lngLat.lat;
+            document.getElementById("lng").value = e.lngLat.lng;
+
+        });
+
+        function addMarker(ltlng,event) {
+
+            if(event === 'click'){
+                user_location = ltlng;
+            }
+            marker = new mapboxgl.Marker({draggable: true,color:"#d02922"})
+                .setLngLat(user_location)
+                .addTo(map)
+                .on('dragend', onDragEnd);
+        }
+        function add_markers(coordinates) {
+
+            var geojson = (saved_markers == coordinates ? saved_markers : '');
+
+            console.log(geojson);
+            // add markers to map
+            geojson.forEach(function (marker) {
+                console.log(marker);
+                // make a marker for each feature and add to the map
+                new mapboxgl.Marker()
+                    .setLngLat(marker)
+                    .addTo(map);
+            });
+
+        }
+
+        function onDragEnd() {
+            var lngLat = marker.getLngLat();
+            document.getElementById("lat").value = lngLat.lat;
+            document.getElementById("lng").value = lngLat.lng;
+            console.log('lng: ' + lngLat.lng + '<br />lat: ' + lngLat.lat);
+        }
+
+        $('#signupForm').submit(function(event){
+            event.preventDefault();
+            var lat = $('#lat').val();
+            var lng = $('#lng').val();
+            var url = 'locations_model.php?add_location&lat=' + lat + '&lng=' + lng;
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data){
+                    alert(data);
+                    location.reload();
+                }
+            });
+        });
+
+        document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+          }
+          });
+    }
 
     $('#showNeighborhoodTable').hide()
     $('#showSchoolTable').hide()

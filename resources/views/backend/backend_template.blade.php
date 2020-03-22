@@ -43,11 +43,22 @@
  
   <link href="{{asset('dist/css/select2.min.css')}}" rel="stylesheet" />
   
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
+
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
   <style type="text/css">
+    #map { height:400px ;width:300; }
+      .geocoder {
+            position:relative;
+        }
      #embed_code{
-    width: 200px;
-    height:400px;
+    width: 425px;
+    height:50px;
   }
+     
     @media (max-width: 720px){
         .profilemedia{
            text-align: center;

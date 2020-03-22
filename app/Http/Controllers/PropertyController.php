@@ -499,4 +499,9 @@ class PropertyController extends Controller
         $facts = Fact::where('property_id',$property_id)->get();
         return $facts;
     }
+    public function getMap()
+    {
+        $location= Location::all();
+        return $location;
+    }
 }

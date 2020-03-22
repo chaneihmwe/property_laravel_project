@@ -43,6 +43,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 		Route::get('get_feature', 'FeatureController@getFeatures')->name('get_feature');
 		Route::resource('agent','AgentController');
 		Route::get('get_agent', 'AgentController@getAgent')->name('get_agent');
+		Route::get('get_map', 'PropertyController@getMap')->name('get_map');
 	});
 /*});*/
 
