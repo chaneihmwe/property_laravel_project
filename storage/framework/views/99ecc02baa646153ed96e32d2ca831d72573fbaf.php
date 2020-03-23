@@ -5,11 +5,11 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h3>Edit Property <a href="<?php echo e(route('admin.property.index')); ?>" class="float-right"><i class="fas fa-backward"></i> back</a></h3>
+        <h3>Edit Property <a href="<?php echo e(route('agent.property.index')); ?>" class="float-right"><i class="fas fa-backward"></i> back</a></h3>
       </div>
 
       <div class="card-body">
-        <form method="post" id="updateButton" action="<?php echo e(route('admin.property.update',$property->id)); ?>" enctype="multipart/form-data">
+        <form method="post" id="updateButton" action="<?php echo e(route('agent.property.update',$property->id)); ?>" enctype="multipart/form-data">
           <?php echo csrf_field(); ?>
           <?php echo method_field('PUT'); ?>
           <input type="hidden" name="property_id" id="property_id" value="<?php echo e($property->id); ?>">
@@ -1132,7 +1132,7 @@ unset($__errorArgs, $__bag); ?>
     /*Get Old Neighborhood and Call ShowOldNeighborhoodTable*/
     var oldNeighborhoodListObj=null;
     function getNeighborhood(property_id) {
-      var url="<?php echo e(route('admin.get_neighborhood_by_id')); ?>";
+      var url="<?php echo e(route('agent.get_neighborhood_by_id')); ?>";
       $.ajax({
         url: url,
         type: "GET",
@@ -1250,7 +1250,7 @@ unset($__errorArgs, $__bag); ?>
     /*Get Old School and Call ShowOldSchoolTable*/
     var oldSchoolListObj=null;
     function getSchool(property_id) {
-      var url="<?php echo e(route('admin.get_school_by_id')); ?>";
+      var url="<?php echo e(route('agent.get_school_by_id')); ?>";
       $.ajax({
         url: url,
         type: "GET",
@@ -1369,7 +1369,7 @@ unset($__errorArgs, $__bag); ?>
     /*Get Old School and Call ShowOldSchoolTable*/
     var oldFactListObj=null;
     function getFact(property_id) {
-      var url="<?php echo e(route('admin.get_fact_by_id')); ?>";
+      var url="<?php echo e(route('agent.get_fact_by_id')); ?>";
       $.ajax({
         url: url,
         type: "GET",
@@ -1533,7 +1533,7 @@ unset($__errorArgs, $__bag); ?>
         {
          console.log(pair[0]+ ', '+ pair[1]); 
         }
-        var url="<?php echo e(route('admin.property.update',':id')); ?>";
+        var url="<?php echo e(route('agent.property.update',':id')); ?>";
         url=url.replace(':id',property_id);
       $.ajax({
           data: formData,
@@ -1547,7 +1547,7 @@ unset($__errorArgs, $__bag); ?>
             $('#saveButton').trigger("reset")
             $('.alertMessage').removeClass('d-none')
             $('.alertMessage').text(data.success)
-            window.location.href="<?php echo e(route('admin.property.index')); ?>"
+            window.location.href="<?php echo e(route('agent.property.index')); ?>"
           },
           error: function (error) {
             var errors=error.responseJSON.errors;

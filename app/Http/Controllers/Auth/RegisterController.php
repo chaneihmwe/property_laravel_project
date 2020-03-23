@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::DASHBOARD;
+    //protected $redirectTo = RouteServiceProvider::DASHBOARD;
 
     /**
      * Create a new controller instance.
@@ -71,6 +71,8 @@ class RegisterController extends Controller
             $name=uniqid().time().'.'.$image->getClientOriginalExtension();
             $image->move(public_path('image/profile'),$name);
             $path='image/profile/'.$name;
+        }else{
+            $path = null;
         }*/
         $path = null;
         $user =  User::create([
@@ -81,7 +83,22 @@ class RegisterController extends Controller
             'address' => $data['address'],
             'image' => $path,
         ]);
-        $user->assignRole('admin');
+
+        $user->assignRole('user');
         return $user;
+    }
+    public function authenticated($request,$user){
+
+        if($user->hasRole('admin')){
+            
+            return redirect(RouteServiceProvider::DASHBOARD);
+
+        }elseif($user->hasRole('agent')){
+
+            return redirect(RouteServiceProvider::AGENT_DASHBOARD);
+
+        }elseif($user->hasRole('user')){
+            return redirect(RouteServiceProvider::MAIN);
+        }
     }
 }

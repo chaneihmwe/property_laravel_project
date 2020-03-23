@@ -11,4 +11,9 @@ class AdminDashboardController extends Controller
     {
         return view('backend.dashboard');
     }
+
+    public function agentDashboard()
+    {
+        return view('backend.agent_dashboard');
+    }
 }

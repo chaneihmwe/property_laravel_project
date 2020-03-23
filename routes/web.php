@@ -14,21 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 /*Build in Routes*/
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+/*Backend Route*/
 /*Custom Routes*/
 Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
-	Route::get('/dashboard', 'AdminDashboardController@index')->name('dashboard');
 	Route::get('get_transportation', 'TransportationController@getTransportations')->name('get_transportation');
 });
 Route::group(['middleware' => ['role:admin']], function () {
 	Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
+		Route::get('/dashboard', 'AdminDashboardController@index')->name('dashboard');
 		Route::resource('status', 'StatusController');
 		Route::resource('type', 'TypeController');
 		Route::get('get_type', 'TypeController@getTypes')->name('get_type');
@@ -45,7 +44,8 @@ Route::group(['middleware' => ['role:admin']], function () {
 });
 
 Route::group(['middleware' => ['role:agent']], function () {
-	Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
+	Route::group(['prefix'=>'agent','as'=>'agent.'], function(){
+	Route::get('/dashboard', 'AdminDashboardController@agentDashboard')->name('dashboard');
 	Route::resource('property', 'PropertyController');
 	Route::get('get_map', 'PropertyController@getMap')->name('get_map');
 	Route::get('get_neighborhood_by_id', 'PropertyController@getNeighborhoodById')->name('get_neighborhood_by_id');
@@ -53,4 +53,11 @@ Route::group(['middleware' => ['role:agent']], function () {
 	Route::get('get_fact_by_id', 'PropertyController@getFactById')->name('get_fact_by_id');
 	});
 });
+
+/*Frontend Route*/
+
+Route::get('/', 'FrontendController@index')->name('main');
+Route::get('/property', 'FrontendController@property')->name('property');
+Route::get('/agent', 'FrontendController@agent')->name('agent');
+Route::get('/blog', 'FrontendController@blog')->name('blog');
 

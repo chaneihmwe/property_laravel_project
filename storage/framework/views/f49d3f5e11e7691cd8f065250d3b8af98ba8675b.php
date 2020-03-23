@@ -89,9 +89,16 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <!-- Brand -->
+      <?php if(auth()->check() && auth()->user()->hasRole('admin')): ?>
       <a class="navbar-brand pt-0" href="<?php echo e(route('admin.dashboard')); ?>">
         <img src="<?php echo e(asset('backend_template/assets/img/brand/blue.png')); ?>" class="navbar-brand-img" alt="...">
       </a>
+      <?php endif; ?>
+      <?php if(auth()->check() && auth()->user()->hasRole('agent')): ?>
+      <a class="navbar-brand pt-0" href="<?php echo e(route('agent.dashboard')); ?>">
+        <img src="<?php echo e(asset('backend_template/assets/img/brand/blue.png')); ?>" class="navbar-brand-img" alt="...">
+      </a>
+      <?php endif; ?>
       <!-- User -->
       <ul class="nav align-items-center d-md-none">
         <li class="nav-item dropdown">
@@ -147,9 +154,16 @@
         <div class="navbar-collapse-header d-md-none">
           <div class="row">
             <div class="col-6 collapse-brand">
-              <a href="../index.html">
+              <?php if(auth()->check() && auth()->user()->hasRole('admin')): ?>
+              <a href="<?php echo e(route('admin.dashboard')); ?>">
                 <img src="<?php echo e(asset('backend_template/assets/img/brand/blue.png')); ?>">
               </a>
+              <?php endif; ?>
+              <?php if(auth()->check() && auth()->user()->hasRole('agent')): ?>
+              <a href="<?php echo e(route('agent.dashboard')); ?>">
+                <img src="<?php echo e(asset('backend_template/assets/img/brand/blue.png')); ?>">
+              </a>
+              <?php endif; ?>
             </div>
             <div class="col-6 collapse-close">
               <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
@@ -172,9 +186,16 @@
         </form>
         <!-- Navigation -->
         <ul class="navbar-nav">
-         <?php if(auth()->check() && auth()->user()->hasAnyRole('admin')): ?>
+         <?php if(auth()->check() && auth()->user()->hasRole('admin')): ?>
           <li class="nav-item  active ">
             <a class="nav-link " href="<?php echo e(route('admin.dashboard')); ?>">
+              <i class="ni ni-tv-2 text-primary"></i> Dashboard
+            </a>
+          </li>
+          <?php endif; ?>
+          <?php if(auth()->check() && auth()->user()->hasRole('agent')): ?>
+          <li class="nav-item  active ">
+            <a class="nav-link " href="<?php echo e(route('agent.dashboard')); ?>">
               <i class="ni ni-tv-2 text-primary"></i> Dashboard
             </a>
           </li>
@@ -205,47 +226,22 @@
               <i class="ni ni-delivery-fast text-blue"></i> Transportation
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link " href="<?php echo e(route('admin.agent.index')); ?>">
+              <i class="ni ni-delivery-fast text-blue"></i> Agent
+            </a>
+          </li>
            <?php endif; ?>
            <?php if(auth()->check() && auth()->user()->hasAnyRole('agent')): ?>
           <li class="nav-item">
-            <a class="nav-link  active " href="<?php echo e(route('admin.property.index')); ?>">
+            <a class="nav-link  active " href="<?php echo e(route('agent.property.index')); ?>">
               <i class="ni ni-building text-blue"></i> Property
             </a>
           </li>
           <?php endif; ?>
-          <li class="nav-item">
-            <a class="nav-link" href="../examples/login.html">
-              <i class="ni ni-key-25 text-info"></i> Login
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../examples/register.html">
-              <i class="ni ni-circle-08 text-pink"></i> Register
-            </a>
-          </li>
         </ul>
         <!-- Divider -->
         <hr class="my-3">
-        <!-- Heading -->
-        <h6 class="navbar-heading text-muted">Documentation</h6>
-        <!-- Navigation -->
-        <ul class="navbar-nav mb-md-3">
-          <li class="nav-item">
-            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
-              <i class="ni ni-spaceship"></i> Getting started
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
-              <i class="ni ni-palette"></i> Foundation
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
-              <i class="ni ni-ui-04"></i> Components
-            </a>
-          </li>
-        </ul>
       </div>
     </div>
   </nav>
@@ -254,7 +250,13 @@
     <nav class="navbar navbar-top navbar-expand-lg navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="../index.html"><i class="ni ni-bullet-list-67"></i> Version 2.1</a>
+        <?php if(auth()->check() && auth()->user()->hasRole('admin')): ?>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="<?php echo e(route('admin.dashboard')); ?>"><i class="ni ni-bullet-list-67"></i></a>
+        <?php endif; ?>
+
+        <?php if(auth()->check() && auth()->user()->hasRole('agent')): ?>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="<?php echo e(route('agent.dashboard')); ?>"><i class="ni ni-bullet-list-67"></i></a>
+        <?php endif; ?>
         <!-- Form -->
         <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
           <div class="form-group mb-0">

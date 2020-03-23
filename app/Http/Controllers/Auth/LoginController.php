@@ -37,4 +37,18 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+    public function authenticated($request,$user){
+
+        if($user->hasRole('admin')){
+            
+            return redirect(RouteServiceProvider::DASHBOARD);
+
+        }elseif($user->hasRole('agent')){
+
+            return redirect(RouteServiceProvider::AGENT_DASHBOARD);
+
+        }elseif($user->hasRole('user')){
+            return redirect(RouteServiceProvider::MAIN);
+        }
+    }
 }

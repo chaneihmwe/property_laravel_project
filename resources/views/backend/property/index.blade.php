@@ -4,7 +4,7 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header border-0">
-        <a href="{{route('admin.property.create')}}" class="btn btn-primary float-right">Add New Property</a>
+        <a href="{{route('agent.property.create')}}" class="btn btn-primary float-right">Add New Property</a>
         <h3 class="mb-0">Property tables</h3>
       </div>
       <div class="card-body">
@@ -35,10 +35,10 @@
                         <td>{{$property->land_area}}</td>
                         <td>{{$property->building_area}}</td>
                         <td>{{$property->price}}</td>
-                        <td><a href="{{route('admin.property.edit',$property->id)}}"><i class="btn fas fa-edit text-white"  style="background-color: #5e72e4"></i></a>
+                        <td><a href="{{route('agent.property.edit',$property->id)}}"><i class="btn fas fa-edit text-white"  style="background-color: #5e72e4"></i></a>
                       
 
-                          <form method="post" action="{{route('admin.property.destroy',$property->id)}}" class="d-inline-block">
+                          <form method="post" action="{{route('agent.property.destroy',$property->id)}}" class="d-inline-block">
 
                             @csrf
                             @method('DELETE')

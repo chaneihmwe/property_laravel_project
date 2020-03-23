@@ -61,11 +61,11 @@
               <span class="nav-link-inner--text">Login</span>
             </a>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a href="{{route('register')}}" class="nav-link">
               <span class="nav-link-inner--text">Register</span>
             </a>
-          </li>
+          </li> --}}
         </ul>
         <hr class="d-lg-none" />
         <ul class="navbar-nav align-items-lg-center ml-lg-auto">

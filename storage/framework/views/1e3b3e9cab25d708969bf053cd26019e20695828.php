@@ -456,18 +456,18 @@ unset($__errorArgs, $__bag); ?>" name="edit_password" id="edit_password">
     })
    $('body').on('click', '.deleteAgent', function () {
         clearInterval()
-        var transportation_id = $(this).data("id");
+        var agent_id = $(this).data("id");
         var status = confirm("Are You sure want to delete !");
         if (status) {
           var url="<?php echo e(route('admin.agent.destroy',':id')); ?>";
-          url=url.replace(':id',transportation_id);
+          url=url.replace(':id',agent_id);
           $.ajax({
               url: url,
               type: "DELETE",
               success: function (data) {
                 $('.alertMessage').removeClass('d-none');
                 $('.alertMessage').text(data.success);
-                getTransportation()
+                getAgent()
                 setInterval(Timer, 3000);
               },
               error: function (data) {

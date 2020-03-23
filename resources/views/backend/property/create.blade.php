@@ -5,14 +5,14 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h3>Create Property <a href="{{route('admin.property.index')}}" class="float-right"><i class="fas fa-backward"></i> back</a></h3>
+        <h3>Create Property <a href="{{route('agent.property.index')}}" class="float-right"><i class="fas fa-backward"></i> back</a></h3>
       </div>
       <div class="alert alert-primary alertMessage d-none float-left col-md-4 col-sm-2 offset-4">
        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
 
       <div class="card-body">
-        <form method="post" action="{{route('admin.property.store')}}" enctype="multipart/form-data" id="saveButton">
+        <form method="post" action="{{route('agent.property.store')}}" enctype="multipart/form-data" id="saveButton">
           @csrf
           <div class="row">
             <div class="col-md-6 col-sm-12">
@@ -594,7 +594,7 @@
 
     getMap();
    function getMap(){
-  var url="{{route('admin.get_map')}}";
+  var url="{{route('agent.get_map')}}";
         $.ajax({
           type:'get',
           url: url,
@@ -939,7 +939,7 @@
         }
       $.ajax({
           data: formData,
-          url: "{{ route('admin.property.store') }}",
+          url: "{{ route('agent.property.store') }}",
           type: "POST",
           dataType:'json',
           cache:false,
@@ -949,7 +949,7 @@
             $('#saveButton').trigger("reset")
             $('.alertMessage').removeClass('d-none')
             $('.alertMessage').text(data.success)
-            window.location.href="{{route('admin.property.index')}}"
+            window.location.href="{{route('agent.property.index')}}"
           },
           error: function (error) {
             var errors=error.responseJSON.errors;
