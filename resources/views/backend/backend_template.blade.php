@@ -172,12 +172,14 @@
         </form>
         <!-- Navigation -->
         <ul class="navbar-nav">
-         {{-- @role('admin') --}} 
+         @hasanyrole('admin')
           <li class="nav-item  active ">
             <a class="nav-link " href="{{route('admin.dashboard')}}">
               <i class="ni ni-tv-2 text-primary"></i> Dashboard
             </a>
           </li>
+          @endhasanyrole
+          @role('admin')
           <li class="nav-item">
             <a class="nav-link " href="{{route('admin.status.index')}}">
               <i class="ni ni-ungroup text-blue"></i> Status
@@ -203,12 +205,14 @@
               <i class="ni ni-delivery-fast text-blue"></i> Transportation
             </a>
           </li>
-          {{-- @endrole --}}
+           @endrole
+           @hasanyrole('agent')
           <li class="nav-item">
             <a class="nav-link  active " href="{{route('admin.property.index')}}">
               <i class="ni ni-building text-blue"></i> Property
             </a>
           </li>
+          @endhasanyrole
           <li class="nav-item">
             <a class="nav-link" href="../examples/login.html">
               <i class="ni ni-key-25 text-info"></i> Login
@@ -263,6 +267,9 @@
           </div>
         </form>
         <!-- User -->
+        @guest
+        @else
+
         <ul class="navbar-nav align-items-center d-none d-md-flex">
           <li class="nav-item dropdown">
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -271,7 +278,7 @@
                   <img alt="Image placeholder" src="{{asset('backend_template/assets/img/theme/team-4-800x800.jpg')}}">
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
-                  <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
+                  <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
                 </div>
               </div>
             </a>
@@ -296,13 +303,19 @@
                 <span>Support</span>
               </a>
               <div class="dropdown-divider"></div>
-              <a href="#!" class="dropdown-item">
-                <i class="ni ni-user-run"></i>
-                <span>Logout</span>
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                 onclick="event.preventDefault();
+                               document.getElementById('logout-form').submit();">
+                  {{ __('Logout') }}
               </a>
+
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
             </div>
           </li>
         </ul>
+        @endguest
       </div>
     </nav>
     <!-- End Navbar -->

@@ -201,21 +201,32 @@
                 </div>
                 <div class="card-body">
                   <div class="row">
-                    @php
-                      $custom_features = json_decode($property->feature_id)
-                    @endphp
-                    @foreach($features as $feature)
-                    <div class="col-md-4 col-sm-6 my-1">
-                      <div class="custom-control custom-checkbox mr-sm-2">
-                        <input type="checkbox" class="custom-control-input" id="{{$feature->feature}}" name="feature[]" multiple="multiple" value="{{$feature->id}}"
-                        @<?php if (in_array($feature->id, $custom_features)): ?>
-                            <?php echo "checked" ?>
-                          <?php endif ?>
-                        >
-                        <label class="custom-control-label" for="{{$feature->feature}}">{{$feature->feature}}</label>
+                    @if($property->feature_id != "null")
+                      @php
+                        $custom_features = json_decode($property->feature_id)
+                      @endphp
+                      @foreach($features as $feature)
+                      <div class="col-md-4 col-sm-6 my-1">
+                        <div class="custom-control custom-checkbox mr-sm-2">
+                          <input type="checkbox" class="custom-control-input" id="{{$feature->feature}}" name="feature[]" multiple="multiple" value="{{$feature->id}}"
+                          @<?php if (in_array($feature->id, $custom_features)): ?>
+                              <?php echo "checked" ?>
+                            <?php endif ?>
+                          >
+                          <label class="custom-control-label" for="{{$feature->feature}}">{{$feature->feature}}</label>
+                        </div>
                       </div>
-                    </div>
-                    @endforeach
+                      @endforeach
+                      @else
+                        @foreach($features as $feature)
+                        <div class="col-md-4 col-sm-6 my-1">
+                          <div class="custom-control custom-checkbox mr-sm-2">
+                            <input type="checkbox" class="custom-control-input" id="{{$feature->feature}}" name="feature[]" multiple="multiple" value="{{$feature->id}}">
+                            <label class="custom-control-label" for="{{$feature->feature}}">{{$feature->feature}}</label>
+                          </div>
+                        </div>
+                        @endforeach
+                    @endif
                   </div>
                 </div>
               </div>
@@ -227,6 +238,7 @@
                 </div>
                 <div class="card-body">
                   <div class="row">
+                    @if($property->tag_id != "null")
                     @php
                       $custom_tags = json_decode($property->tag_id)
                     @endphp
@@ -243,13 +255,21 @@
                       </div>
                     </div>
                     @endforeach
+                    @else
+                      @foreach($tags as $tag)
+                      <div class="col-md-6 col-sm-12 my-1">
+                        <div class="custom-control custom-checkbox mr-sm-2">
+                          <input type="checkbox" class="custom-control-input" id="{{$tag->tag}}" name="tag[]" multiple="multiple" value="{{$tag->id}}">
+                          <label class="custom-control-label" for="{{$tag->tag}}">{{$tag->tag}}</label>
+                        </div>
+                      </div>
+                      @endforeach
+                    @endif
                   </div>
                 </div>
-              </div>
-              
+              </div>  
             </div>
 
-            
             <div class="col-md-6 col-sm-12">
               <!-- Location -->
               <div class="card">
@@ -367,19 +387,24 @@
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-old-floor" role="tabpanel" aria-labelledby="nav-old-floor-tab">
-                      <input type="hidden" name="old-floor" value="{{$floors->floor_image}}">
+                      @if($floors != "[]")
+                        @foreach($floors as $floor)
+                          @php
+                            $floors = json_decode($floor->floor_image);
+                          @endphp
+                        @endforeach
+                      <input type="hidden" name="old-floor" value="{{$floor->floor_image}}">
                       <div class="row mt-3">
-                        @php
-                          $floors = json_decode($floors->floor_image);
-                        @endphp
                         @if($floors)
                           @foreach($floors as $floor_image)
                             <div class="col-md-3 col-3">
                               <img src="{{asset($floor_image)}}" class="edit-image img-fluid">
                             </div>
                           @endforeach
-                        @else
-                          <div class="col-lg-8 col-md-8">
+                        @endif
+                      </div>
+                      @else
+                        <div class="col-lg-12 col-md-12">
                             <button type="button" class="btn-icon-clipboard" data-clipboard-text="active-40" title="Copy to clipboard">
                               <div>
                                 <span>Upload Your House Floor Now!!</span>
@@ -387,8 +412,7 @@
                               </div>
                             </button>
                           </div>
-                        @endif
-                      </div>  
+                      @endif  
                     </div>
                     <div class="tab-pane fade" id="nav-new-floor" role="tabpanel" aria-labelledby="nav-new-floor-tab">
                       <div class="form-group mt-3">
@@ -415,19 +439,24 @@
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-old-attachment" role="tabpanel" aria-labelledby="nav-old-attachment-tab">
-                      <input type="hidden" name="old-attachment" value="{{$attachments->file}}">
+                      @if($attachments != "[]")
+                        @foreach($attachments as $attachment)
+                          @php
+                            $attachments = json_decode($attachment->file);
+                          @endphp
+                        @endforeach
+                      <input type="hidden" name="old-attachment" value="{{$attachment->file}}">
                       <div class="row mt-3">
-                        @php
-                          $attachments = json_decode($attachments->file);
-                        @endphp
                         @if($attachments)
                           @foreach($attachments as $file)
                             <div class="col-md-3 col-3">
                               <p class="text-primary">{{$file}}</p>
                             </div>
                           @endforeach
-                        @else
-                          <div class="col-lg-8 col-md-8">
+                        @endif
+                      </div>
+                      @else
+                        <div class="col-lg-8 col-md-8">
                             <button type="button" class="btn-icon-clipboard" data-clipboard-text="active-40" title="Copy to clipboard">
                               <div>
                                 <span>Upload Your File Now!!</span>
@@ -435,8 +464,7 @@
                               </div>
                             </button>
                           </div>
-                        @endif
-                      </div>  
+                      @endif  
                     </div>
                     <div class="tab-pane fade" id="nav-new-attachment" role="tabpanel" aria-labelledby="nav-new-attachment-tab">
                       <div class="form-group mt-3">
@@ -448,9 +476,7 @@
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="col-12">
               <!-- Gallery -->
               <div class="card mt-2">
                 <div class="card-header property-card bg-transparent">
@@ -465,18 +491,23 @@
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-old-gallery" role="tabpanel" aria-labelledby="nav-old-gallery-tab">
-                      <input type="hidden" name="old-gallery" value="{{$galleries->gallery_image}}">
+                      @if($galleries != "[]")
+                        @foreach($galleries as $gallery)
+                          @php
+                            $galleries = json_decode($gallery->gallery_image);
+                          @endphp
+                        @endforeach
+                      <input type="hidden" name="old-gallery" value="{{$gallery->gallery_image}}">
                       <div class="row mt-3 icon-examples">
-                        @php
-                          $galleries = json_decode($galleries->gallery_image);
-                        @endphp
                         @if($galleries)
                           @foreach($galleries as $gallery_image)
                             <div class="col-md-2 col-3">
                               <img src="{{asset($gallery_image)}}" class="edit-image img-fluid">
                             </div>
                           @endforeach
-                        @else
+                        @endif
+                      </div>
+                      @else
                           <div class="col-lg-8 col-md-8">
                             <button type="button" class="btn-icon-clipboard" data-clipboard-text="active-40" title="Copy to clipboard">
                               <div>
@@ -484,9 +515,8 @@
                                 <i class="ni ni-active-40 ml-3"></i>
                               </div>
                             </button>
-                          </div>
-                        @endif
-                      </div>  
+                          </div> 
+                      @endif 
                     </div>
                     <div class="tab-pane fade" id="nav-new-gallery" role="tabpanel" aria-labelledby="nav-new-gallery-tab">
                       <div class="form-group mt-3">
@@ -499,7 +529,6 @@
                 </div>
               </div>
             </div>
-
             <!-- Neighborhood -->
             <div class="col-12">
               <!-- Neighborhood -->

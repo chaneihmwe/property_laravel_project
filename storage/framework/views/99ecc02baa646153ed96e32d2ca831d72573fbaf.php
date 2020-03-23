@@ -342,21 +342,32 @@ unset($__errorArgs, $__bag); ?>
                 </div>
                 <div class="card-body">
                   <div class="row">
-                    <?php
-                      $custom_features = json_decode($property->feature_id)
-                    ?>
-                    <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="col-md-4 col-sm-6 my-1">
-                      <div class="custom-control custom-checkbox mr-sm-2">
-                        <input type="checkbox" class="custom-control-input" id="<?php echo e($feature->feature); ?>" name="feature[]" multiple="multiple" value="<?php echo e($feature->id); ?>"
-                        @<?php if (in_array($feature->id, $custom_features)): ?>
-                            <?php echo "checked" ?>
-                          <?php endif ?>
-                        >
-                        <label class="custom-control-label" for="<?php echo e($feature->feature); ?>"><?php echo e($feature->feature); ?></label>
+                    <?php if($property->feature_id != "null"): ?>
+                      <?php
+                        $custom_features = json_decode($property->feature_id)
+                      ?>
+                      <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      <div class="col-md-4 col-sm-6 my-1">
+                        <div class="custom-control custom-checkbox mr-sm-2">
+                          <input type="checkbox" class="custom-control-input" id="<?php echo e($feature->feature); ?>" name="feature[]" multiple="multiple" value="<?php echo e($feature->id); ?>"
+                          @<?php if (in_array($feature->id, $custom_features)): ?>
+                              <?php echo "checked" ?>
+                            <?php endif ?>
+                          >
+                          <label class="custom-control-label" for="<?php echo e($feature->feature); ?>"><?php echo e($feature->feature); ?></label>
+                        </div>
                       </div>
-                    </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                      <?php else: ?>
+                        <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="col-md-4 col-sm-6 my-1">
+                          <div class="custom-control custom-checkbox mr-sm-2">
+                            <input type="checkbox" class="custom-control-input" id="<?php echo e($feature->feature); ?>" name="feature[]" multiple="multiple" value="<?php echo e($feature->id); ?>">
+                            <label class="custom-control-label" for="<?php echo e($feature->feature); ?>"><?php echo e($feature->feature); ?></label>
+                          </div>
+                        </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
                   </div>
                 </div>
               </div>
@@ -368,6 +379,7 @@ unset($__errorArgs, $__bag); ?>
                 </div>
                 <div class="card-body">
                   <div class="row">
+                    <?php if($property->tag_id != "null"): ?>
                     <?php
                       $custom_tags = json_decode($property->tag_id)
                     ?>
@@ -384,13 +396,21 @@ unset($__errorArgs, $__bag); ?>
                       </div>
                     </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
+                      <?php $__currentLoopData = $tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      <div class="col-md-6 col-sm-12 my-1">
+                        <div class="custom-control custom-checkbox mr-sm-2">
+                          <input type="checkbox" class="custom-control-input" id="<?php echo e($tag->tag); ?>" name="tag[]" multiple="multiple" value="<?php echo e($tag->id); ?>">
+                          <label class="custom-control-label" for="<?php echo e($tag->tag); ?>"><?php echo e($tag->tag); ?></label>
+                        </div>
+                      </div>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
                   </div>
                 </div>
-              </div>
-              
+              </div>  
             </div>
 
-            
             <div class="col-md-6 col-sm-12">
               <!-- Location -->
               <div class="card">
@@ -564,19 +584,24 @@ unset($__errorArgs, $__bag); ?>
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-old-floor" role="tabpanel" aria-labelledby="nav-old-floor-tab">
-                      <input type="hidden" name="old-floor" value="<?php echo e($floors->floor_image); ?>">
+                      <?php if($floors != "[]"): ?>
+                        <?php $__currentLoopData = $floors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                          <?php
+                            $floors = json_decode($floor->floor_image);
+                          ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                      <input type="hidden" name="old-floor" value="<?php echo e($floor->floor_image); ?>">
                       <div class="row mt-3">
-                        <?php
-                          $floors = json_decode($floors->floor_image);
-                        ?>
                         <?php if($floors): ?>
                           <?php $__currentLoopData = $floors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floor_image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-md-3 col-3">
                               <img src="<?php echo e(asset($floor_image)); ?>" class="edit-image img-fluid">
                             </div>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <?php else: ?>
-                          <div class="col-lg-8 col-md-8">
+                        <?php endif; ?>
+                      </div>
+                      <?php else: ?>
+                        <div class="col-lg-12 col-md-12">
                             <button type="button" class="btn-icon-clipboard" data-clipboard-text="active-40" title="Copy to clipboard">
                               <div>
                                 <span>Upload Your House Floor Now!!</span>
@@ -584,8 +609,7 @@ unset($__errorArgs, $__bag); ?>
                               </div>
                             </button>
                           </div>
-                        <?php endif; ?>
-                      </div>  
+                      <?php endif; ?>  
                     </div>
                     <div class="tab-pane fade" id="nav-new-floor" role="tabpanel" aria-labelledby="nav-new-floor-tab">
                       <div class="form-group mt-3">
@@ -612,19 +636,24 @@ unset($__errorArgs, $__bag); ?>
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-old-attachment" role="tabpanel" aria-labelledby="nav-old-attachment-tab">
-                      <input type="hidden" name="old-attachment" value="<?php echo e($attachments->file); ?>">
+                      <?php if($attachments != "[]"): ?>
+                        <?php $__currentLoopData = $attachments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attachment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                          <?php
+                            $attachments = json_decode($attachment->file);
+                          ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                      <input type="hidden" name="old-attachment" value="<?php echo e($attachment->file); ?>">
                       <div class="row mt-3">
-                        <?php
-                          $attachments = json_decode($attachments->file);
-                        ?>
                         <?php if($attachments): ?>
                           <?php $__currentLoopData = $attachments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-md-3 col-3">
                               <p class="text-primary"><?php echo e($file); ?></p>
                             </div>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <?php else: ?>
-                          <div class="col-lg-8 col-md-8">
+                        <?php endif; ?>
+                      </div>
+                      <?php else: ?>
+                        <div class="col-lg-8 col-md-8">
                             <button type="button" class="btn-icon-clipboard" data-clipboard-text="active-40" title="Copy to clipboard">
                               <div>
                                 <span>Upload Your File Now!!</span>
@@ -632,8 +661,7 @@ unset($__errorArgs, $__bag); ?>
                               </div>
                             </button>
                           </div>
-                        <?php endif; ?>
-                      </div>  
+                      <?php endif; ?>  
                     </div>
                     <div class="tab-pane fade" id="nav-new-attachment" role="tabpanel" aria-labelledby="nav-new-attachment-tab">
                       <div class="form-group mt-3">
@@ -645,9 +673,7 @@ unset($__errorArgs, $__bag); ?>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="col-12">
               <!-- Gallery -->
               <div class="card mt-2">
                 <div class="card-header property-card bg-transparent">
@@ -662,18 +688,23 @@ unset($__errorArgs, $__bag); ?>
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-old-gallery" role="tabpanel" aria-labelledby="nav-old-gallery-tab">
-                      <input type="hidden" name="old-gallery" value="<?php echo e($galleries->gallery_image); ?>">
+                      <?php if($galleries != "[]"): ?>
+                        <?php $__currentLoopData = $galleries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                          <?php
+                            $galleries = json_decode($gallery->gallery_image);
+                          ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                      <input type="hidden" name="old-gallery" value="<?php echo e($gallery->gallery_image); ?>">
                       <div class="row mt-3 icon-examples">
-                        <?php
-                          $galleries = json_decode($galleries->gallery_image);
-                        ?>
                         <?php if($galleries): ?>
                           <?php $__currentLoopData = $galleries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery_image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="col-md-2 col-3">
                               <img src="<?php echo e(asset($gallery_image)); ?>" class="edit-image img-fluid">
                             </div>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <?php else: ?>
+                        <?php endif; ?>
+                      </div>
+                      <?php else: ?>
                           <div class="col-lg-8 col-md-8">
                             <button type="button" class="btn-icon-clipboard" data-clipboard-text="active-40" title="Copy to clipboard">
                               <div>
@@ -681,9 +712,8 @@ unset($__errorArgs, $__bag); ?>
                                 <i class="ni ni-active-40 ml-3"></i>
                               </div>
                             </button>
-                          </div>
-                        <?php endif; ?>
-                      </div>  
+                          </div> 
+                      <?php endif; ?> 
                     </div>
                     <div class="tab-pane fade" id="nav-new-gallery" role="tabpanel" aria-labelledby="nav-new-gallery-tab">
                       <div class="form-group mt-3">
@@ -696,7 +726,6 @@ unset($__errorArgs, $__bag); ?>
                 </div>
               </div>
             </div>
-
             <!-- Neighborhood -->
             <div class="col-12">
               <!-- Neighborhood -->

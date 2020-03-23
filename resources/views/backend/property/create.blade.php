@@ -185,7 +185,7 @@
                     <p class="error-message-price p-2 text-md-left text-danger ml-3"></p>
                     <div class="col-auto mt-2">
                       <a href="#" class="call-us text-primary d-none">Call Us</a>
-                      <input type="hidden" name="price" class="call-us">
+                      <input type="hidden" name="keep_price" class="call-us" id="keep_price">
                     </div>
                   </div>
                   <div class="col-auto my-1">
@@ -924,6 +924,12 @@
     $('#saveButton').submit(function (e) {
       e.preventDefault()
       var formData = new FormData(this)
+      var price=$('#price').val();
+      var keep_price = $('#keep_price').val()
+      if (price == '' && keep_price == '') {
+        $('.error-message-price').text("The price field is required")
+        $('#price').addClass('border border-danger')
+      }
       formData.append("neighborhood_array",JSON.stringify(neighborhoodListObj))
       formData.append("school_array",JSON.stringify(schoolListObj))
       formData.append("fact_array",JSON.stringify(factListObj))
@@ -949,15 +955,14 @@
             var errors=error.responseJSON.errors;
               if(errors){
                 console.log(errors)
-                  var title=errors.title[0];
-                  var bedroom=errors.bedroom[0];
-                  var bathroom=errors.bathroom[0];
-                  var land_area=errors.land_area[0];
-                  var building_area=errors.building_area[0];
-                  var price=errors.price[0];
-                  var address=errors.address[0];
-                  var longitude=errors.longitude[0];
-                  var latitude=errors.latitude[0];
+                  var title=errors.title;
+                  var bedroom=errors.bedroom;
+                  var bathroom=errors.bathroom;
+                  var land_area=errors.land_area;
+                  var building_area=errors.building_area;
+                  var address=errors.address;
+                  var longitude=errors.longitude;
+                  var latitude=errors.latitude;
                   console.log(title)
                   $('.error-message-title').text(title)
                   $('#title').addClass('border border-danger')
@@ -969,14 +974,12 @@
                   $('#land_area').addClass('border border-danger')
                   $('.error-message-building-area').text(building_area)
                   $('#building_area').addClass('border border-danger')
-                  $('.error-message-price').text(price)
-                  $('#price').addClass('border border-danger')
                   $('.error-message-address').text(address)
                   $('#address').addClass('border border-danger')
                   $('.error-message-longitude').text(longitude)
-                  $('#longitude').addClass('border border-danger')
+                  $('#lng').addClass('border border-danger')
                   $('.error-message-latitude').text(latitude)
-                  $('#latitude').addClass('border border-danger')
+                  $('#lat').addClass('border border-danger')
               }
           }
       })

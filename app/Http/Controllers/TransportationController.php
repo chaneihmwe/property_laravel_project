@@ -39,19 +39,8 @@ class TransportationController extends Controller
             "transportation_type" => "required|min:3|max:10",
             /*'transportation_image' => '|image|mimes:jpeg,png,jpg,gif,svg|max:2048',*/
         ]);
-        $transportation_image = $request->file('transportation_image');
-        if($transportation_image){
-            $name=uniqid().time().'.'.$transportation_image->getClientOriginalExtension();
-            $transportation_image->move(public_path('image/transportation'),$name);
-            $path='image/transportation/'.$name;
-        }
-        else if ($transportation_image == null) {
-            $path = $request->transportation_old_image;
-        }
-
         Transportation::Create([
             'transportation_type' => $request->transportation_type,
-            /*'transportation_image' => $path*/
         ]);        
    
         return response()->json(['success'=>'Transportation saved successfully.']);
@@ -91,22 +80,11 @@ class TransportationController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "edit_transportation_type" => "required|min:3|max:10",
-            'edit_transportation_image' => '|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            "edit_transportation_type" => "required|min:3|max:10"
         ]);
-        $transportation_image = $request->file('edit_transportation_image');
-        if($transportation_image){
-            $name=uniqid().time().'.'.$transportation_image->getClientOriginalExtension();
-            $transportation_image->move(public_path('image/transportation'),$name);
-            $path='image/transportation/'.$name;
-        }
-        else if ($transportation_image == null) {
-            $path = $request->transportation_old_image;
-        }
         $transportation_id = $request->edit_transportation_id;
         $transportation= Transportation::find($transportation_id);
         $transportation->transportation_type=$request->edit_transportation_type;
-        $transportation->transportation_image=$path;
         $transportation->save();
         return response()->json(['success'=>'Transportation saved successfully.']);   
     }

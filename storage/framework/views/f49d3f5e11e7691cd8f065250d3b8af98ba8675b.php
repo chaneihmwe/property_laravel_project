@@ -172,12 +172,14 @@
         </form>
         <!-- Navigation -->
         <ul class="navbar-nav">
-          
+         <?php if(auth()->check() && auth()->user()->hasAnyRole('admin')): ?>
           <li class="nav-item  active ">
             <a class="nav-link " href="<?php echo e(route('admin.dashboard')); ?>">
               <i class="ni ni-tv-2 text-primary"></i> Dashboard
             </a>
           </li>
+          <?php endif; ?>
+          <?php if(auth()->check() && auth()->user()->hasRole('admin')): ?>
           <li class="nav-item">
             <a class="nav-link " href="<?php echo e(route('admin.status.index')); ?>">
               <i class="ni ni-ungroup text-blue"></i> Status
@@ -203,12 +205,14 @@
               <i class="ni ni-delivery-fast text-blue"></i> Transportation
             </a>
           </li>
-          
+           <?php endif; ?>
+           <?php if(auth()->check() && auth()->user()->hasAnyRole('agent')): ?>
           <li class="nav-item">
             <a class="nav-link  active " href="<?php echo e(route('admin.property.index')); ?>">
               <i class="ni ni-building text-blue"></i> Property
             </a>
           </li>
+          <?php endif; ?>
           <li class="nav-item">
             <a class="nav-link" href="../examples/login.html">
               <i class="ni ni-key-25 text-info"></i> Login
@@ -263,6 +267,9 @@
           </div>
         </form>
         <!-- User -->
+        <?php if(auth()->guard()->guest()): ?>
+        <?php else: ?>
+
         <ul class="navbar-nav align-items-center d-none d-md-flex">
           <li class="nav-item dropdown">
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -271,7 +278,7 @@
                   <img alt="Image placeholder" src="<?php echo e(asset('backend_template/assets/img/theme/team-4-800x800.jpg')); ?>">
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
-                  <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
+                  <span class="mb-0 text-sm  font-weight-bold"><?php echo e(Auth::user()->name); ?></span>
                 </div>
               </div>
             </a>
@@ -296,13 +303,20 @@
                 <span>Support</span>
               </a>
               <div class="dropdown-divider"></div>
-              <a href="#!" class="dropdown-item">
-                <i class="ni ni-user-run"></i>
-                <span>Logout</span>
+              <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
+                 onclick="event.preventDefault();
+                               document.getElementById('logout-form').submit();">
+                  <?php echo e(__('Logout')); ?>
+
               </a>
+
+              <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                  <?php echo csrf_field(); ?>
+              </form>
             </div>
           </li>
         </ul>
+        <?php endif; ?>
       </div>
     </nav>
     <!-- End Navbar -->

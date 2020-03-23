@@ -16,8 +16,7 @@
                   <thead class="thead-light">
                     <tr>
                       <th>No</th>
-                      <th>Name</th>
-                      <th>Image</th>
+                      <th>Transportation Type</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -55,21 +54,6 @@ unset($__errorArgs, $__bag); ?>" id="transportation_type" name="transportation_t
                       <p class="error-message-type p-2 text-md-left text-danger"></p>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="transportation_image" class="col-md-4 col-form-label text-md-right"><?php echo e(__('Transportation Image')); ?></label>
-
-                  <div class="col-md-6">
-                      <input id="transportation_image" type="file" class="form-control <?php $__errorArgs = ['transportation_image'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>" name="transportation_image" value="<?php echo e(old('transportation_image')); ?>" autocomplete="transportation_image" autofocus>
-                      <p class="error-message-image p-2 text-md-left text-danger"></p>
-                  </div>
-              </div> 
               </div>
   	        </div>
   	      </div>
@@ -111,23 +95,6 @@ unset($__errorArgs, $__bag); ?>" id="edit_transportation_type" name="edit_transp
                       <p class="edit-error-message-type p-2 text-md-left text-danger"></p>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="edit_transportation_image" class="col-md-4 col-form-label text-md-right"><?php echo e(__('Transportation Image')); ?></label>
-
-                  <div class="col-md-6">
-                      <input type="hidden" name="transportation_old_image" id="transportation_old_image">
-                      <input id="edit_transportation_image" type="file" class="form-control <?php $__errorArgs = ['edit_transportation_image'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>" name="edit_transportation_image" value="<?php echo e(old('edit_transportation_image')); ?>" autocomplete="edit_transportation_image" autofocus>
-                      <p class="edit-error-message-image p-2 text-md-left text-danger"></p>
-                      <img class="transportation_old_image img-fluid pt-2" style="width: 50px">
-                  </div>
-                </div> 
               </div>
             </div>
           </div>
@@ -170,10 +137,10 @@ unset($__errorArgs, $__bag); ?>" name="edit_transportation_image" value="<?php e
             var j=1;
             var html='';
             $.each(data,function(i,v){
+              console.log(data);
               html+=`<tr>
                         <td>${j++}</td>
                         <td>${v.transportation_type}</td>
-                        <td><img src="<?php echo e(asset('${v.transportation_image}')); ?>" class="img-fluid" style="width:50px;height:50px"></td>
                         <td>
                           <button class="btn btn-primary btn-sm d-inline-block editTransportation " data-id="${v.id}"><i class="ni ni-settings"></i></button>
                           <button class="btn btn-danger btn-sm d-inline-block deleteTransportation " data-id="${v.id}"> <i class="ni ni-fat-delete"></i></button>    
@@ -192,7 +159,6 @@ unset($__errorArgs, $__bag); ?>" name="edit_transportation_image" value="<?php e
         clearInterval(myStopTimer)
         $('#saveBtn').text("Save");
         $('#transportation_id').val('');
-        $('.transportation_old_image').removeAttr('src');
         document.getElementById("transportationForm").reset()
         $('#modelHeading').html("Create New Transportation");
         $('#transportationModal').modal('show');
@@ -227,9 +193,7 @@ unset($__errorArgs, $__bag); ?>" name="edit_transportation_image" value="<?php e
             var errors=error.responseJSON.errors;
               if(errors){
                   var transportation_type=errors.transportation_type;
-                  var transportation_image=errors.transportation_image;
                   $('.error-message-type').text(transportation_type)
-                  $('.error-message-image').text(transportation_image)
               }
             $('#saveBtn').html('Save Changes');
           }
@@ -250,8 +214,6 @@ unset($__errorArgs, $__bag); ?>" name="edit_transportation_image" value="<?php e
               $('#editTransportationModal').modal('show');
               $('#edit_transportation_id').val(data.id);
               $('#edit_transportation_type').val(data.transportation_type);
-              $('#transportation_old_image').val(data.transportation_image);
-              $('.transportation_old_image').attr('src',`<?php echo e(asset('${data.transportation_image}')); ?>`);
           },
           error: function (error) {
           }
@@ -293,9 +255,7 @@ unset($__errorArgs, $__bag); ?>" name="edit_transportation_image" value="<?php e
             var errors=error.responseJSON.errors;
               if(errors){
                   var transportation_type=errors.edit_transportation_type;
-                  var transportation_image=errors.edit_transportation_image;
                   $('.edit-error-message-type').text(transportation_type)
-                  $('.edit-error-message-image').text(transportation_image)
               }
             $('#saveBtn').html('Save Changes');
           }

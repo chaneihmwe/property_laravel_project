@@ -61,11 +61,15 @@ class PropertyController extends Controller
             "bathroom" => "required|min:1",
             "land_area" => "required|min:1|max:30",
             "building_area" => "required|min:1|max:30",
-            "price" => "required",
             "address" => "required|min:5|max:30",
             "longitude" => "required|min:1|max:30",
             "latitude" => "required|min:1|max:30",
         ]);
+        if ($request->price) {
+            $price = $request->price;
+        }else if ($request->keep_price == '0') {
+            $price = $request->keep_price;
+        }
         $property = Property::create([
             "status_id" => intval($request->status) ,
             "type_id" => intval($request->type) ,
@@ -74,7 +78,7 @@ class PropertyController extends Controller
             "bathroom" => $request->bathroom ,
             "land_area" => $request->land_area,
             "building_area" => $request->building_area ,
-            "price" => $request->price ,
+            "price" => $price ,
             "feature_id" => json_encode($request->feature) ,
             "tag_id" => json_encode($request->tag) ,
             "garage" => $request->garage ,
@@ -211,11 +215,10 @@ class PropertyController extends Controller
         $location = Location::where('property_id',$property_id)->get();
         $location = $location[0];
         $floors = Floor::where('property_id',$property_id)->get();
-        $floors = $floors[0];
         $attachments = Attachment::where('property_id',$property_id)->get();
-        $attachments = $attachments[0];
+        $attachments = $attachments;
         $galleries = Gallery::where('property_id',$property_id)->get();
-        $galleries = $galleries[0];
+        $galleries = $galleries;
         $neighborhoods = Neighborhood::where('property_id',$property_id)->get();
         return view('backend.property.edit', compact('property','statuses','types','features','tags','transportations','location','floors','attachments','galleries','neighborhoods'));
     }
@@ -288,16 +291,15 @@ class PropertyController extends Controller
             }else{
                 $path = $request->old_floor;
             }
-            Floor::where('property_id', '=', $property_id)
-                ->update(array(
-                    "property_id" => $property_id ,
-                    "floor_image" => $path,
-            ));
+            Floor::updateOrCreate([
+                "property_id" => $property_id ,
+                "floor_image" => $path,
+            ]);
         }
 
         $gallery_array=array();
         if ($request->file('gallery') || $request->old_gallery) {
-            if ($request->file('floor')) {
+            if ($request->file('gallery')) {
                 $gallery = $request->file('gallery');
                 if($gallery){
                     foreach ($gallery as $gallery_item) {
@@ -311,16 +313,15 @@ class PropertyController extends Controller
             }else{
                 $path = $request->old_gallery;
             }
-            Gallery::where('property_id', '=', $property_id)
-                ->update(array(
+            Gallery::updateOrCreate([
                 "property_id" => $property_id ,
                 "gallery_image" => $path,
-            ));
+            ]);
         }
 
         $attachment_array=array();
         if ($request->file('attachment') || $request->old_attachment) {
-            if ($request->file('floor')) {
+            if ($request->file('attachment')) {
                 $attachment = $request->file('attachment');
                 if($attachment){
                     foreach ($attachment as $attachment_item) {
@@ -334,11 +335,10 @@ class PropertyController extends Controller
             }else{
                 $path = $request->old_attachment;
             }
-            Attachment::where('property_id', '=', $property_id)
-                ->update(array(
+            Attachment::updateOrCreate([
                 "property_id" => $property_id ,
                 "file" => $path,
-            ));
+            ]);
         }
 
         $neighborhoods = Neighborhood::where('property_id', $property_id)->get();
